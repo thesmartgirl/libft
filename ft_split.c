@@ -1,54 +1,51 @@
 #include "libft.h"
 
-int is_separator(char c, char sep) {
-    return c == sep;
-}
-
-int words_count(const char *str, char sep) {
-    int count = 0;
-    int in_word = 0;
-
+static size_t count_words(const char *str, char sep) {
+    size_t count = 0;
     while (*str) {
-        if (!is_separator(*str, sep) && !in_word) {
-            in_word = 1;
+        while (*str == sep)
+            str++;
+        if (*str)
             count++;
-        } else if (is_separator(*str, sep)) {
-            in_word = 0;
-        }
-        str++;
+        while (*str && *str != sep)
+            str++;
     }
     return count;
 }
 
+static char **allocate_array(const char *str, char sep) {
+    char **array;
+
+    array = (char **)malloc((count_words(str, sep) + 1) * sizeof(char *));
+    if (!array)
+        return NULL;
+    return array;
+}
+
 char **ft_split(const char *str, char sep) {
     char **array;
-    int count = 0;
-    int start = 0;
-    int i = 0;
+    size_t i;
+    size_t start;
 
-    int num_words = words_count(str, sep);
-    array = (char **)malloc((num_words + 1) * sizeof(char *));
-    if (!array) return NULL;
-
-    while (str[i]) {
-        if (!is_separator(str[i], sep)) {
-            start = i;
-            while (str[i] && !is_separator(str[i], sep)) {
-                i++;
-            }
-            array[count] = ft_strdup(str + start);
-            if (!array[count]) {
-                while (count > 0) {
-                    free(array[--count]);
-                }
-                free(array);
+    if (!str)
+        return NULL;
+    array = allocate_array(str, sep);
+    if (!array)
+        return NULL;
+    i = 0;
+    while (*str) {
+        while (*str == sep)
+            str++;
+        start = 0;
+        while (str[start] && str[start] != sep)
+            start++;
+        if (start > 0) {
+            array[i] = ft_substr(str, 0, start);
+            if (!array[i++])
                 return NULL;
-            }
-            count++;
-        } else {
-            i++;
         }
+        str += start;
     }
-    array[count] = NULL;
+    array[i] = NULL;
     return array;
 }

@@ -26,5 +26,15 @@ int main()
   printf("ft_strnstr, big= 12345678, little = 5: %s\n", ft_strnstr("12345678", "5", 8));
   printf("new string %s\n", ft_strdup("hej"));
 
+
+  char **array;
+
+  array = ft_split("this is_a beautiful_day", 'i');
+  int i = 0;
+  while(array[i])
+  {
+    printf("i= %d, %s\n", i, array[i]);
+    i++;
+  }
   return 0;
 }
