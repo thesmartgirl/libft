@@ -1,13 +1,15 @@
 #include "libft.h"
 
+/*The strlcpy() function copies up to size - 1 characters from
+ the NUL-terminated string src to dst, NUL-terminating the result.*/
 size_t ft_strlcpy(char *dst, const char *src, size_t size)
 {
   size_t i;
   size_t len;
 
   len = ft_strlen(src);
-  if (len == 0)
-    return 0;
+  if (size == 0)
+    return len;
   i = 0;
   while(i < size - 1 && src[i] != '\0')
   {
