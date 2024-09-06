@@ -13,7 +13,7 @@ BONUS			=	ft_lstadd_back_bonus.c ft_lstadd_front_bonus.c ft_lstclear_bonus.c ft_
 BONUS_OBJS		= $(BONUS:.c=.o)
 
 CC				= @cc
-RM				= @rm -f
+RM				= rm -f
 CFLAGS			= -Wall -Wextra -Werror
 
 NAME			= libft.a
@@ -26,10 +26,10 @@ $(NAME):		$(OBJS)
 $(OBJS) $(BONUS_OBJS): %.o: %.c
 				$(CC) $(CFLAGS) -c $< -o $@
 clean:
-				@$(RM) $(OBJS) $(BONUS_OBJS)
+				$(RM) $(OBJS) $(BONUS_OBJS)
 
 fclean:			clean
-				@$(RM) $(NAME)
+				$(RM) $(NAME)
 
 re:				fclean $(NAME)
 

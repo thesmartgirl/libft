@@ -29,7 +29,7 @@ int main()
 
   char **array;
 
-  array = ft_split("this is_a beautiful_day", 'i');
+  array = ft_split("this is_a beautiful_day", '_');
   int i = 0;
   while(array[i])
   {

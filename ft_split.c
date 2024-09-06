@@ -1,5 +1,20 @@
 #include "libft.h"
 
+static void free_array(char **array)
+{
+  size_t i;
+
+  if(!array)
+    return;
+  i = 0;
+  while(array[i])
+  {
+    free(array[i]);
+    i++;
+  }
+  free(array);
+}
+
 static size_t count_words(const char *str, char sep) {
     size_t count = 0;
     while (*str) {
@@ -13,39 +28,42 @@ static size_t count_words(const char *str, char sep) {
     return count;
 }
 
-static char **allocate_array(const char *str, char sep) {
-    char **array;
+static int fill_words_in_array(const char *str, char **array, char sep)
+{
+  size_t i;
+  size_t start;
 
-    array = (char **)malloc((count_words(str, sep) + 1) * sizeof(char *));
-    if (!array)
-        return NULL;
-    return array;
+  i = 0;
+  while (*str)
+  {
+      while (*str == sep)
+          str++;
+      start = 0;
+      while (str[start] && str[start] != sep)
+          start++;
+      if (start > 0) {
+          array[i] = ft_substr(str, 0, start);
+          if (!array[i++])
+          {
+              free_array(array);
+              return 0;
+          }
+      }
+      str += start;
+  }
+  array[i] = NULL;
+  return 1;
 }
 
 char **ft_split(const char *str, char sep) {
     char **array;
-    size_t i;
-    size_t start;
 
     if (!str)
         return NULL;
-    array = allocate_array(str, sep);
+    array = (char **)malloc((count_words(str, sep) + 1) * sizeof(char *));
     if (!array)
         return NULL;
-    i = 0;
-    while (*str) {
-        while (*str == sep)
-            str++;
-        start = 0;
-        while (str[start] && str[start] != sep)
-            start++;
-        if (start > 0) {
-            array[i] = ft_substr(str, 0, start);
-            if (!array[i++])
-                return NULL;
-        }
-        str += start;
-    }
-    array[i] = NULL;
+    if(!fill_words_in_array(str, array, sep))
+      return NULL;
     return array;
 }
